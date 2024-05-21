@@ -18,14 +18,10 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-const Search = styled('div')(({ theme }) => ({
+const Search = styled('div')(() => ({
     position: 'relative',
     display: 'flex',
-    borderRadius: theme.shape.borderRadius,
-    [theme.breakpoints.up('sm')]: {
-        marginLeft: theme.spacing(1),
-        width: 'auto',
-    },
+    borderRadius: '5px',
     color: '#5D6679', 
     backgroundColor: '#F7F9FC',
     border: "solid 0.1px #D0D3D9",

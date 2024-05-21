@@ -37,7 +37,7 @@ const Sidebar = () => {
     return (
         <Box
             sx={{
-                height: '100%',
+                height: '102%',
                 backgroundColor: 'white',
                 position: 'relative',
                 top: 0,

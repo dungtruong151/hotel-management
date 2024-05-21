@@ -2,8 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import axios from 'axios';
-import { useState, useEffect } from 'react';
 import Dashboard from './pages/dashboard';
 import Appbar from './components/appbar';
 import Sidebar from './components/sidebar';
@@ -13,19 +11,9 @@ import Guest from './pages/guest';
 import Rooms from './pages/rooms';
 import Deal from './pages/deal';
 import Rate from './pages/rate';
+import Footer from './components/footer';
 
 export default function App() {
-    const [listOfPosts, setListOfPosts] = useState([]);
-
-    useEffect(() => {
-        axios.get('http://localhost:5000/')
-            .then((response) => {
-                setListOfPosts(response.data);
-            }).catch((error) => {
-                console.log(error);
-            });
-    }, []);
-
     return (
         <div style={{ backgroundColor: '#eef0f2' }}>
             <Appbar />
@@ -33,7 +21,7 @@ export default function App() {
                 <Grid item xs={2}>
                     <Sidebar />
                 </Grid>
-                <Grid item xs={10} sx={{background: "primary"}}>
+                <Grid item xs={10} sx={{backgroundColor: 'white'}}>
                     <BrowserRouter>
                         <Routes>
                             <Route index element={<Dashboard />} />
@@ -48,7 +36,7 @@ export default function App() {
                     </BrowserRouter>
                 </Grid>
             </Grid>
-            
+            <Footer />
         </div>
       
     );

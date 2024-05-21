@@ -21,10 +21,11 @@ export const getProduct = async (req, res) => {
 };
 
 export const createProduct = async (req, res) => {
-    const { name, address, price, size } = req.body;
+    //reservation_id, name, room_number, total_amount, amount_paid, status
+    const { reservation_id, name, room_number, total_amount, amount_paid, status } = req.body;
     
     try {
-        const product = await create(name, address, price, size);
+        const product = await create(reservation_id, name, room_number, total_amount, amount_paid, status);
         return res.status(201).json(product);
     } catch (error) {
         res.status(404).json({ message: error.message });
@@ -32,11 +33,11 @@ export const createProduct = async (req, res) => {
 };
 
 export const updateProduct = async (req, res) => {
-    const id = req.params.id;
-    const { name, address, price, size } = req.body;
+    const reservation_id = req.params.id;
+    const { name, room_number, total_amount, amount_paid, status } = req.body;
     
     try {
-        const product = await update(id, name, address, price, size);
+        const product = await update(reservation_id, name, room_number, total_amount, amount_paid, status);
         return res.status(200).json(product);
     } catch (error) {
         res.status(404).json({ message: error.message });

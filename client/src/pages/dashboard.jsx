@@ -5,6 +5,12 @@ import Paper from '@mui/material/Paper';
 import styled from '@mui/material/styles/styled';
 import Button from '@mui/material/Button';
 import { Gauge, gaugeClasses } from '@mui/x-charts/Gauge';
+import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
+import { BarChart } from '@mui/x-charts/BarChart';
+import IconButton from '@mui/material/IconButton';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Divider from '@mui/material/Divider';
+import { grey } from '@mui/material/colors';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -23,10 +29,59 @@ const BoxStyle = styled('div')(() => ({
     padding: '5px',
     textAlign: 'center',
     borderRadius: '5px',
+    margin: '5px 0',
 }));
+  
+const dataset = [
+    {
+        percent: 85,
+        month: 'Aug',
+    },
+    {
+        percent: 62,
+        month: 'Sep',
+    },
+    {
+        percent: 80,
+        month: 'Oct',
+    },
+    {
+        percent: 46,
+        month: 'Nov',
+    },
+    {
+        percent: 95,
+        month: 'Dec',
+    },
+    {
+        percent: 98,
+        month: 'Jan',
+    },
+    {
+        percent: 80,
+        month: 'Fev',
+    },
+    {
+        percent: 78,
+        month: 'Mar',
+    },
+    {
+        percent: 88,
+        month: 'Apr',
+    },
+    {
+        percent: 90,
+        month: 'May',
+    }, 
+];
+  
+const chartSetting = {
+    series: [{ dataKey: 'percent', dataset }],
+    height: 300,
+    width: 700,
+};
 
 export default function Dashboard() {
-    
     return (
         <Container sx={{
             width: '100%',
@@ -35,7 +90,7 @@ export default function Dashboard() {
             marginTop: '20px',
         }}>
             <Stack spacing={2}>
-                <Item>
+                <Item >
                     <Button variant="contained" sx={{float: 'right', zIndex: 1, borderRadius: '7px'}}>Create booking</Button>
                     <p style={{
                         textAlign: 'center', 
@@ -48,8 +103,8 @@ export default function Dashboard() {
                        
                     </p>
                 </Item>
-                <Item>
-                    <h2 style={{margin: '5px 0 15px 0'}}>Overview</h2>
+                <Item sx={{border: '2px solid #d5d8dd'}}>
+                    <h2 style={{margin: '5px 0 15px 5px'}}>Overview</h2>
                     <Stack direction="row" spacing={2} sx={{justifyContent: 'space-between'}}>
                         <div>
                             <p style={{margin: 0}}>Today's</p>
@@ -73,38 +128,50 @@ export default function Dashboard() {
                         </div>
                     </Stack>
                 </Item>
-                <Item>
-                    <h2 style={{margin: '5px 0 15px 0'}}>Rooms</h2>
+                <Item sx={{border: '2px solid #d5d8dd'}}>
+                    <h2 style={{margin: '5px 0 15px 5px'}}>Rooms</h2>
                     <Stack direction="row" spacing={2}>
                         <Item sx={{border: '2px solid #d5d8dd'}}>
+                            <IconButton aria-label="delete" sx={{float: 'right'}}>
+                                <MoreVertIcon />
+                            </IconButton>
                             <BoxStyle>2 Deals</BoxStyle>
                             <p style={{margin: '10px 0'}}>Single sharing</p>
-                            <h2 style={{margin: 0}}>2<span style={{fontSize: 17, color: '#858D9D'}}>/30</span></h2>
+                            <h2 style={{margin: 0}}>2<span style={{fontSize: 17, color: grey[500]}}>/30</span></h2>
                             <h1 style={{margin: '5px 0', color: '#137ae4'}}>$ 568<span style={{fontSize: 17, color: '#858D9D'}}> /day</span></h1>
                         </Item>
                         <Item sx={{border: '2px solid #d5d8dd'}}>
+                        <IconButton aria-label="delete" sx={{float: 'right'}}>
+                                <MoreVertIcon />
+                            </IconButton>
                             <BoxStyle>2 Deals</BoxStyle>
                             <p style={{margin: '10px 0'}}>Double sharing</p>
-                            <h2 style={{margin: 0}}>2<span style={{fontSize: 17, color: '#858D9D'}}>/35</span></h2>
+                            <h2 style={{margin: 0}}>2<span style={{fontSize: 17, color: grey[500]}}>/35</span></h2>
                             <h1 style={{margin: '5px 0', color: '#137ae4'}}>$ 1,068<span style={{fontSize: 17, color: '#858D9D'}}> /day</span></h1>
                         </Item>
                         <Item sx={{border: '2px solid #d5d8dd'}}>
+                            <IconButton aria-label="delete" sx={{float: 'right'}}>
+                                <MoreVertIcon />
+                            </IconButton>
                             <BoxStyle sx={{visibility: 'hidden'}}>2 Deals</BoxStyle>
                             <p style={{margin: '10px 0'}}>Triple sharing</p>
-                            <h2 style={{margin: 0}}>2<span style={{fontSize: 17, color: '#858D9D'}}>/25</span></h2>
+                            <h2 style={{margin: 0}}>2<span style={{fontSize: 17, color: grey[500]}}>/25</span></h2>
                             <h1 style={{margin: '5px 0', color: '#137ae4'}}>$ 1,568<span style={{fontSize: 17, color: '#858D9D'}}> /day</span></h1>
                         </Item>
                         <Item sx={{border: '2px solid #d5d8dd'}}>
+                            <IconButton aria-label="delete" sx={{float: 'right'}}>
+                                <MoreVertIcon />
+                            </IconButton>
                             <BoxStyle sx={{visibility: 'hidden'}}>2 Deals</BoxStyle>
                             <p style={{margin: '10px 0'}}>VIP Suit</p>
-                            <h2 style={{margin: 0}}>4<span style={{fontSize: 17, color: '#858D9D'}}>/10</span></h2>
+                            <h2 style={{margin: 0}}>4<span style={{fontSize: 17, color: grey[500]}}>/10</span></h2>
                             <h1 style={{margin: '5px 0', color: '#137ae4'}}>$ 2,568<span style={{fontSize: 17, color: '#858D9D'}}> /day</span></h1>
                         </Item>
                     </Stack>
-                </Item>
-                <Stack direction="row" spacing={2}>
-                    <Item>
-                        <h2 style={{margin: '5px 0 10px 0'}}>Room status</h2>
+                </Item >
+                <Stack direction="row" spacing={2} >
+                    <Item sx={{border: '2px solid #d5d8dd'}}>
+                        <h2 style={{margin: '5px 0 10px 5px'}}>Room status</h2>
                         <Stack direction="row" spacing={15}>
                             <Item>
                                 <table style={{width: '100%'}}>
@@ -148,8 +215,8 @@ export default function Dashboard() {
                             </Item>
                         </Stack>
                     </Item>
-                    <Item>
-                        <h2 style={{margin: '5px 0 10px 0'}}>Floor status</h2>
+                    <Item sx={{border: '2px solid #d5d8dd'}}>
+                        <h2 style={{margin: '5px 0 10px 5px'}}>Floor status</h2>
                         <Stack direction="row">
                             <Item>
                                 <Gauge 
@@ -182,13 +249,13 @@ export default function Dashboard() {
                                         <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <circle cx="4" cy="4" r="4" fill="#448DF2"/>
                                         </svg>
-                                        <span style={{marginLeft: '5px'}}>Competed</span>
+                                        <span style={{marginLeft: '10px'}}>Competed</span>
                                     </Item>
                                     <Item>
                                         <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <circle cx="4" cy="4" r="4" fill="#EEF0F2"/>
                                         </svg>
-                                        <span style={{marginLeft: '5px'}}>Yet to Complete</span>
+                                        <span style={{marginLeft: '10px'}}>Yet to Complete</span>
                                     </Item>
                                 </Stack>
                             </Item>
@@ -196,8 +263,61 @@ export default function Dashboard() {
                     </Item>
                 </Stack>
                 <Stack direction="row" spacing={2}>
-                    <Item>1</Item>
-                    <Item>2</Item>
+                    <Item sx={{border: '2px solid #d5d8dd'}}>
+                        <Button variant="outlined" href="" startIcon={<CalendarMonthOutlinedIcon />} sx={{float: 'right', margin: '5px'}}>
+                            Monthly
+                        </Button>
+                        <h2 style={{margin: '5px 0 10px 5px'}}>Occupancy Statistics</h2>
+                        <div style={{ width: '100%' }}>
+                            <BarChart
+                                dataset={dataset}
+                                xAxis={[{ 
+                                    scaleType: 'band', 
+                                    dataKey: 'month', 
+                                    tickPlacement: 'extremities', 
+                                    tickLabelPlacement: 'middle', 
+                                    categoryGapRatio: 0.5,
+                                    colorMap: {
+                                        type: 'ordinal',
+                                        colors: ['#5395f0']
+                                    }
+                                }]}
+                                grid={{ horizontal: true }}
+                                
+                                {...chartSetting}
+                            />
+                        </div>
+                    </Item>
+                    <Item sx={{border: '2px solid #d5d8dd'}}>
+                        <IconButton aria-label="delete" sx={{float: 'right'}}>
+                            <MoreVertIcon />
+                        </IconButton>
+                        <h2 style={{margin: '5px 0 10px 5px'}}>Customers feedback</h2>
+                        <div style={{margin: '0 0 0 5px'}}>
+                            <h3 style={{float: 'right'}}>A201</h3>
+                            <div>
+                                <p><strong>Mark</strong></p>
+                                <p style={{margin: 0}}>Food could be better.</p>
+                            </div>
+                        </div> 
+                        <Divider />
+                        <div style={{margin: '0 0 0 5px'}}>
+                            <h3 style={{float: 'right'}}>A101</h3>
+                            <div>
+                                <p><strong>Christian</strong></p>
+                                <p style={{margin: 0}}>Facilities are not enough for amount paid.</p>
+                            </div>
+                        </div> 
+                        <Divider />
+                        <div style={{margin: '0 0 0 5px'}}>
+                            <h3 style={{float: 'right'}}>A301</h3>
+                            <div>
+                                <p><strong>Alexander</strong></p>
+                                <p style={{margin: 0}}>Room cleaning could be better.</p>
+                            </div>
+                        </div> 
+                        <Divider />
+                    </Item>
                 </Stack>
             </Stack>
         </Container>
