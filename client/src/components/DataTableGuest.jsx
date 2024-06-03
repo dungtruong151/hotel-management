@@ -143,23 +143,25 @@ export default function DataTableGuest({ searchValue }) {
 
   const [selectedId, setSelectedId] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const selectedGuest = rows.find(guest => guest.reservation_id === selectedId);
+  //console.log(selectedGuest && selectedGuest.reservation_id);
 
-    const handleOpenUserMenu = (event, id) => {
-        setAnchorElUser(event.currentTarget);
-        setSelectedId(id);
-    };
+  const handleOpenUserMenu = (event, id) => {
+      setAnchorElUser(event.currentTarget);
+      setSelectedId(id);
+  };
 
-    const handleCloseUserMenu = () => {
-        setAnchorElUser(null);
-    };
+  const handleCloseUserMenu = () => {
+      setAnchorElUser(null);
+  };
 
   const handleDelete = () => {
-    fetch(`http://localhost:5000/delete/${selectedId}`, {
-      method: 'DELETE',
-    }).then(() => {
+    try {
+      axios.delete(`http://localhost:5000/delete/${selectedId}`);
       handleCloseUserMenu();
-      window.location.reload();
-    });
+    } catch (error) {
+      console.error('Error deleting guest', error);
+    }
   };
   
   const [open, setOpen] = React.useState(false);
@@ -319,15 +321,15 @@ export default function DataTableGuest({ searchValue }) {
                 defaultValue={selectedId}
                 disabled
               />
-              <TextField autoFocus margin="dense" id="name" label="Name" type="text" fullWidth />
-              <TextField margin="dense" id="room_number" label="Room Number" type="text" fullWidth />
-              <TextField margin="dense" id="total_amount" label="Total Amount" type="number" fullWidth />
-              <TextField margin="dense" id="amount_paid" label="Amount Paid" type="number" fullWidth />
+              <TextField autoFocus margin="dense" id="name" label="Name" type="text" fullWidth defaultValue={selectedGuest && selectedGuest.name}/>
+              <TextField margin="dense" id="room_number" label="Room Number" type="text" fullWidth defaultValue={selectedGuest && selectedGuest.room_number}/>
+              <TextField margin="dense" id="total_amount" label="Total Amount" type="number" fullWidth defaultValue={selectedGuest && selectedGuest.total_amount}/>
+              <TextField margin="dense" id="amount_paid" label="Amount Paid" type="number" fullWidth defaultValue={selectedGuest && selectedGuest.amount_paid}/>
               <TextField
                 id="outlined-select-currency"
                 select
                 label="Status"
-                defaultValue="Clean"
+                defaultValue={selectedGuest && selectedGuest.status}
                 helperText="Please select the status"
                 sx={{ marginTop: '8px' }}
               >
