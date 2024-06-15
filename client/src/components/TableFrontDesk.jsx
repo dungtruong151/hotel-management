@@ -16,6 +16,13 @@ import MenuItem from "@mui/material/MenuItem";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 
 const columns = [
   { id: "reservation_id", label: "Reservation ID", minWidth: 100 },
@@ -135,7 +142,7 @@ const statusFormat = (value) => {
 
 let rows = [];
 
-export default function DataTableRoom({ searchValue }) {
+export default function TableFrontDesk({ searchValue }) {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -201,6 +208,10 @@ export default function DataTableRoom({ searchValue }) {
 
   const [selectedId, setSelectedId] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const selectedGuest = rows.find(
+    (guest) => guest.reservation_id === selectedId
+  );
+  //console.log(selectedGuest && selectedGuest.reservation_id);
 
   const handleOpenUserMenu = (event, id) => {
     setAnchorElUser(event.currentTarget);
@@ -212,13 +223,74 @@ export default function DataTableRoom({ searchValue }) {
   };
 
   const handleDelete = () => {
-    fetch(`http://localhost:5000/delete/${selectedId}`, {
-      method: "DELETE",
-    }).then(() => {
+    try {
+      axios.delete(`http://localhost:5000/delete/${selectedId}`);
       handleCloseUserMenu();
-      window.location.reload();
-    });
+    } catch (error) {
+      console.error("Error deleting guest", error);
+    }
   };
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleUpdate = async () => {
+    handleClose();
+
+    const reservation_id = document.getElementById("reservation_id").value;
+    const name = document.getElementById("name").value;
+    const room_number = document.getElementById("room_number").value;
+    const total_amount = document.getElementById("total_amount").value;
+    const amount_paid = document.getElementById("amount_paid").value;
+    const status = document.getElementById("status").value;
+
+    const guestData = {
+      reservation_id,
+      name,
+      room_number,
+      total_amount,
+      amount_paid,
+      status,
+    };
+
+    console.log(guestData);
+
+    try {
+      const response = await axios.put(
+        `http://localhost:5000/update/${guestData.reservation_id}`,
+        guestData
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error creating guest", error);
+    }
+  };
+
+  const currencies = [
+    {
+      value: "Clean",
+      label: "Clean",
+    },
+    {
+      value: "Dirty",
+      label: "Dirty",
+    },
+    {
+      value: "Inspected",
+      label: "Inspected",
+    },
+    {
+      value: "Pick up",
+      label: "Pick up",
+    },
+  ];
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
@@ -301,7 +373,7 @@ export default function DataTableRoom({ searchValue }) {
                                 <MenuItem onClick={handleDelete}>
                                   Delete
                                 </MenuItem>
-                                <MenuItem onClick={handleCloseUserMenu}>
+                                <MenuItem onClick={handleClickOpen}>
                                   Edit
                                 </MenuItem>
                               </Menu>
@@ -329,6 +401,77 @@ export default function DataTableRoom({ searchValue }) {
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Updating Guests</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Please fill in the details below.
+          </DialogContentText>
+          <TextField
+            margin="dense"
+            id="reservation_id"
+            label="Reservation ID"
+            type="number"
+            fullWidth
+            defaultValue={selectedGuest && selectedGuest.reservation_id}
+            disabled
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Name"
+            type="text"
+            fullWidth
+            defaultValue={selectedGuest && selectedGuest.name}
+          />
+          <TextField
+            margin="dense"
+            id="room_number"
+            label="Room Number"
+            type="text"
+            fullWidth
+            defaultValue={selectedGuest && selectedGuest.room_number}
+          />
+          <TextField
+            margin="dense"
+            id="total_amount"
+            label="Total Amount"
+            type="number"
+            fullWidth
+            defaultValue={selectedGuest && selectedGuest.total_amount}
+          />
+          <TextField
+            margin="dense"
+            id="amount_paid"
+            label="Amount Paid"
+            type="number"
+            fullWidth
+            defaultValue={selectedGuest && selectedGuest.amount_paid}
+          />
+          <TextField
+            margin="dense"
+            id="status"
+            select
+            label="Status"
+            defaultValue={selectedGuest && selectedGuest.status}
+            SelectProps={{
+              native: true,
+            }}
+            helperText="Please select the status"
+          >
+            {currencies.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </TextField>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleUpdate}>Update</Button>
+        </DialogActions>
+      </Dialog>
     </Paper>
   );
 }
