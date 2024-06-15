@@ -3,6 +3,7 @@ import { Container } from '@mui/material';
 import Button from '@mui/material/Button';
 import { blue, grey } from '@mui/material/colors';
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
+import DataTableRate from '../components/DataTableRate.jsx';
 
 export default function Rate() {
     return (
@@ -30,7 +31,7 @@ export default function Rate() {
                 </Button>
             </div>
             
-            {/* <DataTable /> */}
+            <DataTableRate/>
         </Container>
     );
 }

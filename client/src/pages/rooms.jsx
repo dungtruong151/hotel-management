@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container } from '@mui/material';
 import Button from '@mui/material/Button';
+import DataTableRoom from '../components/DataTableRoom'
 import { blue, grey } from '@mui/material/colors';
 
 export default function Rooms() {
@@ -31,7 +32,7 @@ export default function Rooms() {
                 </Button>
             </div>
             
-            {/* <DataTable /> */}
+            <DataTableRoom/>
         </Container>
     );
 }

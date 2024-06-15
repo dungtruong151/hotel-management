@@ -2,6 +2,7 @@ import React from 'react';
 import { Container } from '@mui/material';
 import Button from '@mui/material/Button';
 import { blue, grey } from '@mui/material/colors';
+import DataTableDeal from '../components/DataTableDeal.jsx';
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 
 export default function Deal() {
@@ -33,7 +34,7 @@ export default function Deal() {
                 </Button>
             </div>
             
-            {/* <DataTable /> */}
+            <DataTableDeal/>
         </Container>
     );
 }

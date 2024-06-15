@@ -7,7 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { grey, blue, red, green, orange} from '@mui/material/colors';
+import { grey, red, green, orange} from '@mui/material/colors';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -19,32 +19,38 @@ import Box from '@mui/material/Box';
 
 const columns = [
   {
-    id: 'room_number',
-    label: 'Room Number',
+    id: 'room_type',
+    label: 'Room Type',
     minWidth: 100,
     format: (value) => value.toLocaleString('en-US'),
   },
   {
-    id: 'bed_type',
-    label: 'Bed Type',
+    id: 'deals',
+    label: 'Deals',
     minWidth: 100,
     format: (value) => value.toLocaleString('en-US'),
   },
   {
-    id: 'room_floor',
-    label: 'Room Floor',
+    id: 'cancellation_policy',
+    label: 'Cancellation Policy',
     minWidth: 100,
     format: (value) => value.toLocaleString('en-US'),
   },
   {
-    id: 'room_facility',
-    label: 'Room Facility',
+    id: 'deal_price',
+    label: 'Deal Price',
     minWidth: 100,
     format: (value) => value.toLocaleString('en-US'),
   },
   {
-    id: 'status',
-    label: 'Status',
+    id: 'rate',
+    label: 'Rate',
+    minWidth: 100,
+    format: (value) => value.toLocaleString('en-US'),
+  },
+  {
+    id: 'availability',
+    label: 'Availability',
     minWidth: 100,
     format: (value) => value.toLocaleString('en-US'),
   },
@@ -55,71 +61,59 @@ const columns = [
   }
 ];
 
-function createData(room_number, bed_type, room_floor, room_facility, status, actions) {
-  return { room_number, bed_type, room_floor, room_facility, status, actions };
+function createData(room_type, deals, cancellation_policy, deal_price, rate, availability, actions) {
+  return { room_type, deals, cancellation_policy, deal_price, rate, availability, actions };
 }
 
 const statusFormat = (value) => {
 
-  if (value === 'Waitlist') {
-    return (
-      <div style={{color: blue[400], backgroundColor: blue[50], borderRadius: '16px', padding: '5px 10px', width: 'max-content'}}>
-        {value}
-      </div>
-    );
-  } else if (value === 'Booked') {
+  if (value === 'Strict') {
     return (
       <div style={{color: red[400], backgroundColor: red[50], borderRadius: '16px', padding: '5px 10px', width: 'max-content'}}>
         {value}
       </div>
     );
-  } else if (value === 'Available') {
+  } else if (value === 'Flexible') {
     return (
       <div style={{color: green[400], backgroundColor: green[50], borderRadius: '16px', padding: '5px 10px', width: 'max-content'}}>
         {value}
       </div>
     );
-  } else if (value === 'Reserved') {
+  } else if (value === 'Non refundable') {
     return (
       <div style={{color: orange[400], backgroundColor: orange[50], borderRadius: '16px', padding: '5px 10px', width: 'max-content'}}>
         {value}
       </div>
     );
-  } else if (value === 'Blocked') {
-    return (
-      <div style={{color: red[900], backgroundColor: red[50], borderRadius: '16px', padding: '5px 10px', width: 'max-content'}}>
-        {value}
-      </div>
-    );
-  }
+  } 
 
   return value;
 }
 
 let rows = [];
 
-export default function DataTableRoom({ searchValue }) {
+export default function DataTableRate({ searchValue }) {
   const [data, setData] = useState([]);
 
   useEffect(() => {
     console.log(searchValue);
     if (isNaN(searchValue)) {
-      axios.get('http://localhost:5000/rooms')
+      axios.get('http://localhost:5000/rates')
       .then((response) => {
         setData(response.data);
         rows = [];
         for (const key in data[0])
-          rows.push(createData(data[0][key].room_number, data[0][key].bed_type, data[0][key].room_floor, data[0][key].room_facility, data[0][key].status, null));      
+          rows.push(createData(data[0][key].room_type, data[0][key].deals, data[0][key].cancellation_policy, data[0][key].deal_price, data[0][key].rate, data[0][key].availability, null));      
       })
       .catch((error) => {
         console.log(error);
       });
     } else {
-      axios.get(`http://localhost:5000/rooms/${searchValue}`)
+      axios.get(`http://localhost:5000/rates/${searchValue}`)
       .then((response) => {
         setData(response.data);
         rows = [];
-        rows.push(createData(data[0].room_number, data[0].bed_type, data[0].room_floor, data[0].room_facility, data[0].status, null));      
+        rows.push(createData(data[0].room_type, data[0].deals, data[0].cancellation_policy, data[0].deal_price, data[0].rate, data[0].availability, null));      
       })
       .catch((error) => {
         console.log(error);
@@ -154,7 +148,7 @@ export default function DataTableRoom({ searchValue }) {
     };
 
   const handleDelete = () => {
-    fetch(`http://localhost:5000/rooms/delete/${selectedId}`, {
+    fetch(`http://localhost:5000/rates/delete/${selectedId}`, {
       method: 'DELETE',
     }).then(() => {
       handleCloseUserMenu();
@@ -195,7 +189,7 @@ export default function DataTableRoom({ searchValue }) {
                           align={column.align} 
                           sx={{color: grey[600]}}
                           style={{
-                            ...column.id === 'room_number' ? { fontWeight: 'bold' } : {},
+                            ...column.id === 'room_type' ? { fontWeight: 'bold' } : {},
                           }}
                         >
                           {value === null ? 
