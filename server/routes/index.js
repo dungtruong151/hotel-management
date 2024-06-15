@@ -1,3 +1,4 @@
+
 import { Router } from 'express';
 import { getAllProducts, getProduct, createProduct, updateProduct, deleteProduct,
     getAllRooms, getRoom, createR, deleteR, updateR, 
@@ -34,5 +35,6 @@ appRouter.get('/deals/:id', getDeal);
 appRouter.post('/deals/create', createD);
 appRouter.put('/deals/update/:id', updateD);
 appRouter.delete('/deals/delete/:id', deleteD);
+
 
 export default appRouter;

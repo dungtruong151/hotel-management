@@ -142,35 +142,55 @@ const statusFormat = (value) => {
 
 let rows = [];
 
-export default function DataTableGuest({ searchValue }) {
+export default function TableFrontDesk({ searchValue }) {
   const [data, setData] = useState([]);
 
   useEffect(() => {
     console.log(searchValue);
 
     if (isNaN(searchValue)) {
-
-      axios.get('http://localhost:5000/products/')
-      .then((response) => {
-        setData(response.data);
-        rows = [];
-        for (const key in data[0])
-          rows.push(createData(data[0][key].reservation_id, data[0][key].name, data[0][key].room_number, data[0][key].total_amount, data[0][key].amount_paid, data[0][key].status, null));      
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      axios
+        .get("http://localhost:5000/")
+        .then((response) => {
+          setData(response.data);
+          rows = [];
+          for (const key in data[0])
+            rows.push(
+              createData(
+                data[0][key].reservation_id,
+                data[0][key].name,
+                data[0][key].room_number,
+                data[0][key].total_amount,
+                data[0][key].amount_paid,
+                data[0][key].status,
+                null
+              )
+            );
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     } else {
-      axios.get(`http://localhost:5000/products/${searchValue}`)
-      .then((response) => {
-        setData(response.data);
-        rows = [];
-        rows.push(createData(data[0].reservation_id, data[0].name, data[0].room_number, data[0].total_amount, data[0].amount_paid, data[0].status, null));      
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
+      axios
+        .get(`http://localhost:5000/${searchValue}`)
+        .then((response) => {
+          setData(response.data);
+          rows = [];
+          rows.push(
+            createData(
+              data[0].reservation_id,
+              data[0].name,
+              data[0].room_number,
+              data[0].total_amount,
+              data[0].amount_paid,
+              data[0].status,
+              null
+            )
+          );
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   }, [searchValue, data]);
 
@@ -204,7 +224,7 @@ export default function DataTableGuest({ searchValue }) {
 
   const handleDelete = () => {
     try {
-      axios.delete(`http://localhost:5000/products/delete/${selectedId}`);
+      axios.delete(`http://localhost:5000/delete/${selectedId}`);
       handleCloseUserMenu();
     } catch (error) {
       console.error("Error deleting guest", error);
@@ -240,15 +260,17 @@ export default function DataTableGuest({ searchValue }) {
       status,
     };
 
+    console.log(guestData);
 
-      try {
-          const response = await axios.put(`http://localhost:5000/products/update/${selectedId}`, guestData);
-          console.log(response.data);
-          handleClose();
-      } catch (error) {
-          console.error('Error creating guest', error);
-      }
-
+    try {
+      const response = await axios.put(
+        `http://localhost:5000/update/${guestData.reservation_id}`,
+        guestData
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error creating guest", error);
+    }
   };
 
   const currencies = [
