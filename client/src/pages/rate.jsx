@@ -1,8 +1,11 @@
-import React from "react";
-import { Container } from "@mui/material";
-import Button from "@mui/material/Button";
-import { blue, grey } from "@mui/material/colors";
-import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
+
+import React from 'react';
+import { Container } from '@mui/material';
+import Button from '@mui/material/Button';
+import { blue, grey } from '@mui/material/colors';
+import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
+import DataTableRate from '../components/DataTableRate.jsx';
+
 
 export default function Rate() {
   return (
@@ -34,22 +37,18 @@ export default function Rate() {
           </Button>
         </div>
 
-        <Button
-          variant="outlined"
-          href=""
-          sx={{
-            borderRadius: "100px",
-            backgroundColor: blue[50],
-            color: blue[700],
-            borderColor: blue[700],
-            visibility: "hidden",
-          }}
-        >
-          Ongoing
-        </Button>
-      </div>
 
-      {/* <DataTable /> */}
-    </Container>
-  );
+                <Button 
+                    variant="outlined" 
+                    href="" 
+                    sx={{borderRadius: '100px', backgroundColor: blue[50], color: blue[700], borderColor: blue[700], visibility: 'hidden'}}
+                >
+                    Ongoing
+                </Button>
+            </div>
+            
+            <DataTableRate/>
+        </Container>
+    );
 }
+

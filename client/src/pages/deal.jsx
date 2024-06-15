@@ -1,8 +1,11 @@
-import React from "react";
-import { Container } from "@mui/material";
-import Button from "@mui/material/Button";
-import { blue, grey } from "@mui/material/colors";
-import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
+
+import React from 'react';
+import { Container } from '@mui/material';
+import Button from '@mui/material/Button';
+import { blue, grey } from '@mui/material/colors';
+import DataTableDeal from '../components/DataTableDeal.jsx';
+import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
+
 
 export default function Deal() {
   return (
@@ -34,33 +37,21 @@ export default function Deal() {
           </Button>
         </div>
 
-        <Button
-          variant="outlined"
-          href=""
-          sx={{
-            borderRadius: "100px",
-            backgroundColor: blue[50],
-            color: blue[700],
-            borderColor: blue[700],
-          }}
-        >
-          Ongoing
-        </Button>
-        <Button
-          variant="outlined"
-          href=""
-          sx={{
-            borderRadius: "100px",
-            margin: "0 10px",
-            color: grey[700],
-            borderColor: grey[700],
-          }}
-        >
-          Finished
-        </Button>
-      </div>
 
-      {/* <DataTable /> */}
-    </Container>
-  );
+                <Button 
+                    variant="outlined" 
+                    href="" 
+                    sx={{borderRadius: '100px', backgroundColor: blue[50], color: blue[700], borderColor: blue[700], }}
+                >
+                    Ongoing
+                </Button>
+                <Button variant="outlined" href="" sx={{borderRadius: '100px', margin: '0 10px', color: grey[700], borderColor: grey[700], }} >
+                    Finished
+                </Button>
+            </div>
+            
+            <DataTableDeal/>
+        </Container>
+    );
 }
+
