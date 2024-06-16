@@ -16,17 +16,8 @@ import MenuItem from "@mui/material/MenuItem";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 
 const columns = [
-  { id: "reservation_id", label: "Reservation ID", minWidth: 100 },
-  { id: "name", label: "Name", minWidth: 100 },
   {
     id: "room_number",
     label: "Room Number",
@@ -34,14 +25,22 @@ const columns = [
     format: (value) => value.toLocaleString("en-US"),
   },
   {
-    id: "total_amount",
-    label: "Total Amount",
+    id: "bed_type",
+    label: "Bed Type",
+
     minWidth: 100,
     format: (value) => value.toLocaleString("en-US"),
   },
   {
-    id: "amount_paid",
-    label: "Amount Paid",
+    id: "room_floor",
+    label: "Room Floor",
+    minWidth: 100,
+    format: (value) => value.toLocaleString("en-US"),
+  },
+  {
+    id: "room_facility",
+    label: "Room Facility",
+
     minWidth: 100,
     format: (value) => value.toLocaleString("en-US"),
   },
@@ -59,27 +58,18 @@ const columns = [
 ];
 
 function createData(
-  reservation_id,
-  name,
   room_number,
-  total_amount,
-  amount_paid,
+  bed_type,
+  room_floor,
+  room_facility,
   status,
   actions
 ) {
-  return {
-    reservation_id,
-    name,
-    room_number,
-    total_amount,
-    amount_paid,
-    status,
-    actions,
-  };
+  return { room_number, bed_type, room_floor, room_facility, status, actions };
 }
 
 const statusFormat = (value) => {
-  if (value === "Clean") {
+  if (value === "Waitlist") {
     return (
       <div
         style={{
@@ -93,7 +83,7 @@ const statusFormat = (value) => {
         {value}
       </div>
     );
-  } else if (value === "Dirty") {
+  } else if (value === "Booked") {
     return (
       <div
         style={{
@@ -107,7 +97,7 @@ const statusFormat = (value) => {
         {value}
       </div>
     );
-  } else if (value === "Inspected") {
+  } else if (value === "Available") {
     return (
       <div
         style={{
@@ -121,12 +111,26 @@ const statusFormat = (value) => {
         {value}
       </div>
     );
-  } else if (value === "Pick up") {
+  } else if (value === "Reserved") {
     return (
       <div
         style={{
           color: orange[400],
           backgroundColor: orange[50],
+          borderRadius: "16px",
+          padding: "5px 10px",
+          width: "max-content",
+        }}
+      >
+        {value}
+      </div>
+    );
+  } else if (value === "Blocked") {
+    return (
+      <div
+        style={{
+          color: red[900],
+          backgroundColor: red[50],
           borderRadius: "16px",
           padding: "5px 10px",
           width: "max-content",
@@ -147,46 +151,45 @@ export default function TableFrontDesk({ searchValue }) {
 
   useEffect(() => {
     console.log(searchValue);
-
-    if (isNaN(searchValue)) {
+    if (searchValue === null) {
       axios
-        .get("http://localhost:5000/")
+        .get("http://localhost:5000/rooms")
         .then((response) => {
           setData(response.data);
           rows = [];
           for (const key in data[0])
-            rows.push(
-              createData(
-                data[0][key].reservation_id,
-                data[0][key].name,
-                data[0][key].room_number,
-                data[0][key].total_amount,
-                data[0][key].amount_paid,
-                data[0][key].status,
-                null
-              )
-            );
+            if (data[0][key].status === "Available")
+              rows.push(
+                createData(
+                  data[0][key].room_number,
+                  data[0][key].bed_type,
+                  data[0][key].room_floor,
+                  data[0][key].room_facility,
+                  data[0][key].status,
+                  null
+                )
+              );
         })
         .catch((error) => {
           console.log(error);
         });
     } else {
       axios
-        .get(`http://localhost:5000/${searchValue}`)
+        .get(`http://localhost:5000/rooms/bed/${searchValue}`)
         .then((response) => {
           setData(response.data);
           rows = [];
-          rows.push(
-            createData(
-              data[0].reservation_id,
-              data[0].name,
-              data[0].room_number,
-              data[0].total_amount,
-              data[0].amount_paid,
-              data[0].status,
-              null
-            )
-          );
+          for (const key in data[0])
+            rows.push(
+              createData(
+                data[0][key].room_number,
+                data[0][key].bed_type,
+                data[0][key].room_floor,
+                data[0][key].room_facility,
+                data[0][key].status,
+                null
+              )
+            );
         })
         .catch((error) => {
           console.log(error);
@@ -208,10 +211,6 @@ export default function TableFrontDesk({ searchValue }) {
 
   const [selectedId, setSelectedId] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const selectedGuest = rows.find(
-    (guest) => guest.reservation_id === selectedId
-  );
-  //console.log(selectedGuest && selectedGuest.reservation_id);
 
   const handleOpenUserMenu = (event, id) => {
     setAnchorElUser(event.currentTarget);
@@ -223,74 +222,13 @@ export default function TableFrontDesk({ searchValue }) {
   };
 
   const handleDelete = () => {
-    try {
-      axios.delete(`http://localhost:5000/delete/${selectedId}`);
+    fetch(`http://localhost:5000/rooms/delete/${selectedId}`, {
+      method: "DELETE",
+    }).then(() => {
       handleCloseUserMenu();
-    } catch (error) {
-      console.error("Error deleting guest", error);
-    }
+      window.location.reload();
+    });
   };
-
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleUpdate = async () => {
-    handleClose();
-
-    const reservation_id = document.getElementById("reservation_id").value;
-    const name = document.getElementById("name").value;
-    const room_number = document.getElementById("room_number").value;
-    const total_amount = document.getElementById("total_amount").value;
-    const amount_paid = document.getElementById("amount_paid").value;
-    const status = document.getElementById("status").value;
-
-    const guestData = {
-      reservation_id,
-      name,
-      room_number,
-      total_amount,
-      amount_paid,
-      status,
-    };
-
-    console.log(guestData);
-
-    try {
-      const response = await axios.put(
-        `http://localhost:5000/update/${guestData.reservation_id}`,
-        guestData
-      );
-      console.log(response.data);
-    } catch (error) {
-      console.error("Error creating guest", error);
-    }
-  };
-
-  const currencies = [
-    {
-      value: "Clean",
-      label: "Clean",
-    },
-    {
-      value: "Dirty",
-      label: "Dirty",
-    },
-    {
-      value: "Inspected",
-      label: "Inspected",
-    },
-    {
-      value: "Pick up",
-      label: "Pick up",
-    },
-  ];
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
@@ -320,21 +258,14 @@ export default function TableFrontDesk({ searchValue }) {
                   <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                     {columns.map((column) => {
                       let value = row[column.id];
-                      if (column.id === "reservation_id") {
-                        value = "#" + value;
-                      } else if (
-                        column.id === "total_amount" ||
-                        column.id === "amount_paid"
-                      ) {
-                        value = "$ " + value;
-                      }
+
                       return (
                         <TableCell
                           key={column.id}
                           align={column.align}
                           sx={{ color: grey[600] }}
                           style={{
-                            ...(column.id === "reservation_id"
+                            ...(column.id === "room_number"
                               ? { fontWeight: "bold" }
                               : {}),
                           }}
@@ -344,10 +275,7 @@ export default function TableFrontDesk({ searchValue }) {
                               <Tooltip title="Open settings">
                                 <IconButton
                                   onClick={(event) =>
-                                    handleOpenUserMenu(
-                                      event,
-                                      row.reservation_id
-                                    )
+                                    handleOpenUserMenu(event, row.room_number)
                                   }
                                   sx={{ p: 0 }}
                                 >
@@ -373,7 +301,7 @@ export default function TableFrontDesk({ searchValue }) {
                                 <MenuItem onClick={handleDelete}>
                                   Delete
                                 </MenuItem>
-                                <MenuItem onClick={handleClickOpen}>
+                                <MenuItem onClick={handleCloseUserMenu}>
                                   Edit
                                 </MenuItem>
                               </Menu>
@@ -401,77 +329,6 @@ export default function TableFrontDesk({ searchValue }) {
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Updating Guests</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Please fill in the details below.
-          </DialogContentText>
-          <TextField
-            margin="dense"
-            id="reservation_id"
-            label="Reservation ID"
-            type="number"
-            fullWidth
-            defaultValue={selectedGuest && selectedGuest.reservation_id}
-            disabled
-          />
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Name"
-            type="text"
-            fullWidth
-            defaultValue={selectedGuest && selectedGuest.name}
-          />
-          <TextField
-            margin="dense"
-            id="room_number"
-            label="Room Number"
-            type="text"
-            fullWidth
-            defaultValue={selectedGuest && selectedGuest.room_number}
-          />
-          <TextField
-            margin="dense"
-            id="total_amount"
-            label="Total Amount"
-            type="number"
-            fullWidth
-            defaultValue={selectedGuest && selectedGuest.total_amount}
-          />
-          <TextField
-            margin="dense"
-            id="amount_paid"
-            label="Amount Paid"
-            type="number"
-            fullWidth
-            defaultValue={selectedGuest && selectedGuest.amount_paid}
-          />
-          <TextField
-            margin="dense"
-            id="status"
-            select
-            label="Status"
-            defaultValue={selectedGuest && selectedGuest.status}
-            SelectProps={{
-              native: true,
-            }}
-            helperText="Please select the status"
-          >
-            {currencies.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </TextField>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleUpdate}>Update</Button>
-        </DialogActions>
-      </Dialog>
     </Paper>
   );
 }

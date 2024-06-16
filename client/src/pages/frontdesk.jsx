@@ -9,22 +9,33 @@ import AddIcon from "@mui/icons-material/Add";
 import TableFrontDesk from "../components/TableFrontDesk";
 
 export default function Frontdesk() {
-  const [roomType, setRoomType] = React.useState("all");
+  const [roomType, setRoomType] = React.useState(null);
 
-  const [count, setCount] = useState(0);
+  const [countAdult, setCountAdult] = useState(0);
 
-  const handleIncrement = () => {
-    setCount(count + 1);
+  const handleIncrementAdult = () => {
+    setCountAdult(countAdult + 1);
   };
 
-  const handleDecrement = () => {
-    setCount(count - 1);
+  const handleDecrementAdult = () => {
+    setCountAdult(countAdult - 1);
   };
+
+  const [countChildren, setCountChildren] = useState(0);
+
+  const handleIncrementChildren = () => {
+    setCountChildren(countChildren + 1);
+  };
+
+  const handleDecrementChildren = () => {
+    setCountChildren(countChildren - 1);
+  };
+
   return (
     <Container
       sx={{
         width: "100%",
-        height: "85vh",
+        height: "83vh",
         backgroundColor: "primary",
         position: "relative",
       }}
@@ -61,7 +72,7 @@ export default function Frontdesk() {
             variant="outlined"
             href=""
             sx={
-              roomType === "all"
+              roomType === null
                 ? {
                     borderRadius: "100px",
                     backgroundColor: blue[50],
@@ -74,7 +85,7 @@ export default function Frontdesk() {
                     borderColor: grey[700],
                   }
             }
-            onClick={() => setRoomType("all")}
+            onClick={() => setRoomType(null)}
           >
             All room
           </Button>
@@ -82,7 +93,7 @@ export default function Frontdesk() {
             variant="outlined"
             href=""
             sx={
-              roomType === "single"
+              roomType === "Single bed"
                 ? {
                     borderRadius: "100px",
                     backgroundColor: blue[50],
@@ -95,7 +106,7 @@ export default function Frontdesk() {
                     borderColor: grey[700],
                   }
             }
-            onClick={() => setRoomType("single")}
+            onClick={() => setRoomType("Single bed")}
           >
             Single
           </Button>
@@ -103,7 +114,7 @@ export default function Frontdesk() {
             variant="outlined"
             href=""
             sx={
-              roomType === "double"
+              roomType === "Double bed"
                 ? {
                     borderRadius: "100px",
                     backgroundColor: blue[50],
@@ -116,7 +127,7 @@ export default function Frontdesk() {
                     borderColor: grey[700],
                   }
             }
-            onClick={() => setRoomType("double")}
+            onClick={() => setRoomType("Double bed")}
           >
             Double
           </Button>
@@ -124,7 +135,7 @@ export default function Frontdesk() {
             variant="outlined"
             href=""
             sx={
-              roomType === "triple"
+              roomType === "Suite"
                 ? {
                     borderRadius: "100px",
                     backgroundColor: blue[50],
@@ -137,15 +148,15 @@ export default function Frontdesk() {
                     borderColor: grey[700],
                   }
             }
-            onClick={() => setRoomType("triple")}
+            onClick={() => setRoomType("Suite")}
           >
-            Triple
+            Suite
           </Button>
           <Button
             variant="outlined"
             href=""
             sx={
-              roomType === "vip"
+              roomType === "VIP"
                 ? {
                     borderRadius: "100px",
                     backgroundColor: blue[50],
@@ -158,7 +169,7 @@ export default function Frontdesk() {
                     borderColor: grey[700],
                   }
             }
-            onClick={() => setRoomType("vip")}
+            onClick={() => setRoomType("VIP")}
           >
             VIP
           </Button>
@@ -201,13 +212,13 @@ export default function Frontdesk() {
             </p>
           </div>
           <div>
-            <IconButton onClick={handleDecrement}>
+            <IconButton onClick={handleDecrementAdult}>
               <RemoveIcon />
             </IconButton>
             <IconButton>
-              <span>{count}</span>
+              <span>{countAdult}</span>
             </IconButton>
-            <IconButton onClick={handleIncrement}>
+            <IconButton onClick={handleIncrementAdult}>
               <AddIcon />
             </IconButton>
           </div>
@@ -218,20 +229,20 @@ export default function Frontdesk() {
             <p style={{ color: grey[800], margin: "5px 0" }}>0 - 12 years</p>
           </div>
           <div>
-            <IconButton onClick={handleDecrement}>
+            <IconButton onClick={handleDecrementChildren}>
               <RemoveIcon />
             </IconButton>
             <IconButton>
-              <span>{count}</span>
+              <span>{countChildren}</span>
             </IconButton>
-            <IconButton onClick={handleIncrement}>
+            <IconButton onClick={handleIncrementChildren}>
               <AddIcon />
             </IconButton>
           </div>
         </div>
       </Container>
 
-      <TableFrontDesk />
+      <TableFrontDesk searchValue={roomType} />
     </Container>
   );
 }

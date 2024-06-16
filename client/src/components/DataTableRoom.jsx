@@ -1,25 +1,31 @@
-
-import * as React from 'react';
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import { grey, blue, red, green, orange} from '@mui/material/colors';
-import axios from 'axios';
-import { useState, useEffect } from 'react';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import Box from '@mui/material/Box';
+import * as React from "react";
+import Paper from "@mui/material/Paper";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TablePagination from "@mui/material/TablePagination";
+import TableRow from "@mui/material/TableRow";
+import { grey, blue, red, green, orange } from "@mui/material/colors";
+import axios from "axios";
+import { useState, useEffect } from "react";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import Box from "@mui/material/Box";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  Button,
+} from "@mui/material";
 
 const columns = [
-
   {
     id: "room_number",
     label: "Room Number",
@@ -27,23 +33,21 @@ const columns = [
     format: (value) => value.toLocaleString("en-US"),
   },
   {
-
-    id: 'bed_type',
-    label: 'Bed Type',
+    id: "bed_type",
+    label: "Bed Type",
 
     minWidth: 100,
     format: (value) => value.toLocaleString("en-US"),
   },
   {
-
-    id: 'room_floor',
-    label: 'Room Floor',
+    id: "room_floor",
+    label: "Room Floor",
     minWidth: 100,
-    format: (value) => value.toLocaleString('en-US'),
+    format: (value) => value.toLocaleString("en-US"),
   },
   {
-    id: 'room_facility',
-    label: 'Room Facility',
+    id: "room_facility",
+    label: "Room Facility",
 
     minWidth: 100,
     format: (value) => value.toLocaleString("en-US"),
@@ -61,15 +65,19 @@ const columns = [
   },
 ];
 
-
-function createData(room_number, bed_type, room_floor, room_facility, status, actions) {
+function createData(
+  room_number,
+  bed_type,
+  room_floor,
+  room_facility,
+  status,
+  actions
+) {
   return { room_number, bed_type, room_floor, room_facility, status, actions };
 }
 
 const statusFormat = (value) => {
-
-  if (value === 'Waitlist') {
-
+  if (value === "Waitlist") {
     return (
       <div
         style={{
@@ -83,9 +91,7 @@ const statusFormat = (value) => {
         {value}
       </div>
     );
-
-  } else if (value === 'Booked') {
-
+  } else if (value === "Booked") {
     return (
       <div
         style={{
@@ -99,9 +105,7 @@ const statusFormat = (value) => {
         {value}
       </div>
     );
-
-  } else if (value === 'Available') {
-
+  } else if (value === "Available") {
     return (
       <div
         style={{
@@ -115,9 +119,7 @@ const statusFormat = (value) => {
         {value}
       </div>
     );
-
-  } else if (value === 'Reserved') {
-
+  } else if (value === "Reserved") {
     return (
       <div
         style={{
@@ -131,9 +133,17 @@ const statusFormat = (value) => {
         {value}
       </div>
     );
-  } else if (value === 'Blocked') {
+  } else if (value === "Blocked") {
     return (
-      <div style={{color: red[900], backgroundColor: red[50], borderRadius: '16px', padding: '5px 10px', width: 'max-content'}}>
+      <div
+        style={{
+          color: red[900],
+          backgroundColor: red[50],
+          borderRadius: "16px",
+          padding: "5px 10px",
+          width: "max-content",
+        }}
+      >
         {value}
       </div>
     );
@@ -150,28 +160,46 @@ export default function DataTableRoom({ searchValue }) {
   useEffect(() => {
     console.log(searchValue);
     if (isNaN(searchValue)) {
-
-      axios.get('http://localhost:5000/rooms')
-      .then((response) => {
-        setData(response.data);
-        rows = [];
-        for (const key in data[0])
-          rows.push(createData(data[0][key].room_number, data[0][key].bed_type, data[0][key].room_floor, data[0][key].room_facility, data[0][key].status, null));      
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      axios
+        .get("http://localhost:5000/rooms")
+        .then((response) => {
+          setData(response.data);
+          rows = [];
+          for (const key in data[0])
+            rows.push(
+              createData(
+                data[0][key].room_number,
+                data[0][key].bed_type,
+                data[0][key].room_floor,
+                data[0][key].room_facility,
+                data[0][key].status,
+                null
+              )
+            );
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     } else {
-      axios.get(`http://localhost:5000/rooms/${searchValue}`)
-      .then((response) => {
-        setData(response.data);
-        rows = [];
-        rows.push(createData(data[0].room_number, data[0].bed_type, data[0].room_floor, data[0].room_facility, data[0].status, null));      
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
+      axios
+        .get(`http://localhost:5000/rooms/${searchValue}`)
+        .then((response) => {
+          setData(response.data);
+          rows = [];
+          rows.push(
+            createData(
+              data[0].room_number,
+              data[0].bed_type,
+              data[0].room_floor,
+              data[0].room_facility,
+              data[0].status,
+              null
+            )
+          );
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   }, [searchValue, data]);
 
@@ -188,6 +216,8 @@ export default function DataTableRoom({ searchValue }) {
   };
 
   const [selectedId, setSelectedId] = React.useState(null);
+  const selectedRoom = rows.find((room) => room.room_number === selectedId);
+  // console.log(selectedRoom);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
   const handleOpenUserMenu = (event, id) => {
@@ -200,14 +230,48 @@ export default function DataTableRoom({ searchValue }) {
   };
 
   const handleDelete = () => {
+    handleCloseUserMenu();
 
     fetch(`http://localhost:5000/rooms/delete/${selectedId}`, {
-      method: 'DELETE',
-
+      method: "DELETE",
     }).then(() => {
       handleCloseUserMenu();
       window.location.reload();
     });
+  };
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSave = async () => {
+    handleClose();
+    handleCloseUserMenu();
+
+    const roomData = {
+      room_number: document.getElementsByName("room_number")[0].value,
+      bed_type: document.getElementsByName("bed_type")[0].value,
+      room_floor: document.getElementsByName("room_floor")[0].value,
+      room_facility: document.getElementsByName("room_facility")[0].value,
+      status: document.getElementsByName("status")[0].value,
+    };
+
+    try {
+      const response = await axios.put(
+        `http://localhost:5000/rooms/update/${selectedRoom.room_number}`,
+        roomData
+      );
+      console.log(response.data);
+      handleClose();
+    } catch (error) {
+      console.error("Error creating guest", error);
+    }
   };
 
   return (
@@ -245,18 +309,21 @@ export default function DataTableRoom({ searchValue }) {
                           align={column.align}
                           sx={{ color: grey[600] }}
                           style={{
-
-                            ...column.id === 'room_number' ? { fontWeight: 'bold' } : {},
-
+                            ...(column.id === "room_number"
+                              ? { fontWeight: "bold" }
+                              : {}),
                           }}
                         >
                           {value === null ? (
                             <Box>
                               <Tooltip title="Open settings">
-
-                                <IconButton onClick={(event) => handleOpenUserMenu(event, row.room_number)} sx={{ p: 0 }}>
-                                    <MoreVertIcon />
-
+                                <IconButton
+                                  onClick={(event) =>
+                                    handleOpenUserMenu(event, row.room_number)
+                                  }
+                                  sx={{ p: 0 }}
+                                >
+                                  <MoreVertIcon />
                                 </IconButton>
                               </Tooltip>
                               <Menu
@@ -278,7 +345,11 @@ export default function DataTableRoom({ searchValue }) {
                                 <MenuItem onClick={handleDelete}>
                                   Delete
                                 </MenuItem>
-                                <MenuItem onClick={handleCloseUserMenu}>
+                                <MenuItem
+                                  variant="outlined"
+                                  color="primary"
+                                  onClick={handleClickOpen}
+                                >
                                   Edit
                                 </MenuItem>
                               </Menu>
@@ -306,6 +377,86 @@ export default function DataTableRoom({ searchValue }) {
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Edit Room</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            name="room_number"
+            label="Room Number"
+            type="text"
+            fullWidth
+            defaultValue={selectedRoom && selectedRoom.room_number}
+          />
+
+          <TextField
+            margin="dense"
+            name="bed_type"
+            label="Bed Type"
+            select
+            fullWidth
+            defaultValue={selectedRoom && selectedRoom.bed_type}
+            SelectProps={{
+              native: true,
+            }}
+          >
+            <option value="Single bed">Single bed</option>
+            <option value="Double bed">Double bed</option>
+            <option value="Suite">Suite</option>
+            <option value="VIP">VIP</option>
+          </TextField>
+
+          <TextField
+            margin="dense"
+            name="room_floor"
+            label="Room Floor"
+            select
+            fullWidth
+            defaultValue={selectedRoom && selectedRoom.room_floor}
+            SelectProps={{
+              native: true,
+            }}
+          >
+            <option value="Floor -1">Floor -1</option>
+            <option value="Floor -2">Floor -2</option>
+            <option value="Floor -3">Floor -3</option>
+            <option value="Floor -4">Floor -4</option>
+            <option value="Floor -5">Floor -5</option>
+          </TextField>
+
+          <TextField
+            margin="dense"
+            name="room_facility"
+            label="Room Facility"
+            type="text"
+            fullWidth
+            defaultValue={selectedRoom && selectedRoom.room_facility}
+          />
+
+          <TextField
+            margin="dense"
+            name="status"
+            label="Status"
+            select
+            fullWidth
+            defaultValue={selectedRoom && selectedRoom.status}
+            SelectProps={{
+              native: true,
+            }}
+          >
+            <option value="Waitlist">Waitlist</option>
+            <option value="Booked">Booked</option>
+            <option value="Available">Available</option>
+            <option value="Reserved">Reserved</option>
+            <option value="Blocked">Blocked</option>
+          </TextField>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleSave}>Save</Button>
+        </DialogActions>
+      </Dialog>
     </Paper>
   );
 }

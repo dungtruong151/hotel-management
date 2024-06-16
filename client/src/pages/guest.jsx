@@ -87,7 +87,7 @@ export default function Guest() {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/create",
+        "http://localhost:5000/products/create",
         guestData
       );
       console.log(response.data);

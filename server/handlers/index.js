@@ -1,10 +1,26 @@
-
-import { find, create, findById, remove, update,
-    findRooms, findRoomById, createRoom, removeRoom, updateRoom,
-    findRates, findRateById, createRate, removeRate, updateRate,
-    findDeals, findDealById, createDeal, removeDeal, updateDeal
-} from '../db/queries.js';
-
+import {
+  find,
+  create,
+  findById,
+  remove,
+  update,
+  findRooms,
+  findRoomById,
+  createRoom,
+  removeRoom,
+  updateRoom,
+  findRates,
+  findRateById,
+  createRate,
+  removeRate,
+  updateRate,
+  findDeals,
+  findDealById,
+  createDeal,
+  removeDeal,
+  updateDeal,
+  findRoomsbyBedType,
+} from "../db/queries.js";
 
 export const getAllProducts = async (req, res) => {
   try {
@@ -84,167 +100,234 @@ export const deleteProduct = async (req, res) => {
 
 ////////////////////////
 export const getAllRooms = async (req, res) => {
-    try {
-        const rooms = await findRooms();
-        return res.status(200).json(rooms);
-    } catch (error) {
-        res.status(404).json({ message: error.message });
-    }
+  try {
+    const rooms = await findRooms();
+    return res.status(200).json(rooms);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
 };
 
 export const getRoom = async (req, res) => {
-    const id = req.params.id;
-    
-    try {
-        const room = await findRoomById(id);
-        return res.status(200).json(room);
-    } catch (error) {
-        res.status(404).json({ message: error.message });
-    }
+  const id = req.params.id;
+
+  try {
+    const room = await findRoomById(id);
+    return res.status(200).json(room);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
 };
 
 export const createR = async (req, res) => {
-    //room_number, bed_type, room_floor, room_facility, status
-    const { room_number, bed_type, room_floor, room_facility, status } = req.body;
-    
-    try {
-        const room = await createRoom(room_number, bed_type, room_floor, room_facility, status);
-        return res.status(201).json(room);
-    } catch (error) {
-        res.status(404).json({ message: error.message });
-    }
+  //room_number, bed_type, room_floor, room_facility, status
+  const { room_number, bed_type, room_floor, room_facility, status } = req.body;
+
+  try {
+    const room = await createRoom(
+      room_number,
+      bed_type,
+      room_floor,
+      room_facility,
+      status
+    );
+    return res.status(201).json(room);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
 };
 
 export const updateR = async (req, res) => {
-    const  room_number = req.params.id;
-    const { bed_type, room_floor, room_facility, status } = req.body;
-    
-    try {
-        const room = await updateRoom(room_number, bed_type, room_floor, room_facility, status);
-        return res.status(200).json(room);
-    } catch (error) {
-        res.status(404).json({ message: error.message });
-    }
+  const room_number = req.params.id;
+  const { bed_type, room_floor, room_facility, status } = req.body;
+
+  try {
+    const room = await updateRoom(
+      room_number,
+      bed_type,
+      room_floor,
+      room_facility,
+      status
+    );
+    return res.status(200).json(room);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
 };
 
 export const deleteR = async (req, res) => {
-    const id = req.params.id;
-    
-    try {
-        const room = await removeRoom(id);
-        return res.status(200).json(room);
-    } catch (error) {
-        res.status(404).json({ message: error.message });
-    }
+  const id = req.params.id;
+
+  try {
+    const room = await removeRoom(id);
+    return res.status(200).json(room);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
 };
 ///////////////////////////////////////////
 export const getAllRates = async (req, res) => {
-    try {
-        const rates = await findRates();
-        return res.status(200).json(rates);
-    } catch (error) {
-        res.status(404).json({ message: error.message });
-    }
+  try {
+    const rates = await findRates();
+    return res.status(200).json(rates);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
 };
 
 export const getRate = async (req, res) => {
-    const id = req.params.id;
-    
-    try {
-        const rate = await findRateById(id);
-        return res.status(200).json(rate);
-    } catch (error) {
-        res.status(404).json({ message: error.message });
-    }
+  const id = req.params.id;
+
+  try {
+    const rate = await findRateById(id);
+    return res.status(200).json(rate);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
 };
 
 export const createRA = async (req, res) => {
-    //room_type, deals, cancellation_policy, deal_price, rate, availability
-    const { room_type, deals, cancellation_policy, deal_price, rate, availability } = req.body;
-    
-    try {
-        const rate = await createRate(room_type, deals, cancellation_policy, deal_price, rate, availability);
-        return res.status(201).json(rate);
-    } catch (error) {
-        res.status(404).json({ message: error.message });
-    }
+  //room_type, deals, cancellation_policy, deal_price, rate, availability
+  const {
+    room_type,
+    deals,
+    cancellation_policy,
+    deal_price,
+    rates,
+    availability,
+  } = req.body;
+
+  try {
+    const rate = await createRate(
+      room_type,
+      deals,
+      cancellation_policy,
+      deal_price,
+      rates,
+      availability
+    );
+    return res.status(201).json(rate);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
 };
 
 export const updateRA = async (req, res) => {
-    const  room_type = req.params.id;
-    const { deals, cancellation_policy, deal_price, rate, availability } = req.body;
-    
-    try {
-        const rate = await updateRate(room_type, deals, cancellation_policy, deal_price, rate, availability);
-        return res.status(200).json(rate);
-    } catch (error) {
-        res.status(404).json({ message: error.message });
-    }
+  const room_type = req.params.id;
+  const { deals, cancellation_policy, deal_price, rates, availability } =
+    req.body;
+
+  try {
+    const rate = await updateRate(
+      room_type,
+      deals,
+      cancellation_policy,
+      deal_price,
+      rates,
+      availability
+    );
+    return res.status(200).json(rate);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
 };
 
 export const deleteRA = async (req, res) => {
-    const id = req.params.id;
-    
-    try {
-        const rate = await removeRate(id);
-        return res.status(200).json(rate);
-    } catch (error) {
-        res.status(404).json({ message: error.message });
-    }
+  const id = req.params.id;
+
+  try {
+    const rate = await removeRate(id);
+    return res.status(200).json(rate);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
 };
 /////////////////////////////////
 ///////////////////////////////////////////
 export const getAllDeals = async (req, res) => {
-    try {
-        const deals = await findDeals();
-        return res.status(200).json(deals);
-    } catch (error) {
-        res.status(404).json({ message: error.message });
-    }
+  try {
+    const deals = await findDeals();
+    return res.status(200).json(deals);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
 };
 
 export const getDeal = async (req, res) => {
-    const id = req.params.id;
-    
-    try {
-        const deal = await findDealById(id);
-        return res.status(200).json(deal);
-    } catch (error) {
-        res.status(404).json({ message: error.message });
-    }
+  const id = req.params.id;
+
+  try {
+    const deal = await findDealById(id);
+    return res.status(200).json(deal);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
 };
 
 export const createD = async (req, res) => {
-    //reference_number, deal_name, reservations_left, end_date, room_type, status
-    const { reference_number, deal_name, reservations_left, end_date, room_type, status } = req.body;
-    
-    try {
-        const deal = await createDeal(reference_number, deal_name, reservations_left, end_date, room_type, status);
-        return res.status(201).json(deal);
-    } catch (error) {
-        res.status(404).json({ message: error.message });
-    }
+  //reference_number, deal_name, reservations_left, end_date, room_type, status
+  const {
+    reference_number,
+    deal_name,
+    reservations_left,
+    end_date,
+    room_type,
+    status,
+  } = req.body;
+
+  try {
+    const deal = await createDeal(
+      reference_number,
+      deal_name,
+      reservations_left,
+      end_date,
+      room_type,
+      status
+    );
+    return res.status(201).json(deal);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
 };
 
 export const updateD = async (req, res) => {
-    const  reference_number = req.params.id;
-    const { deal_name, reservations_left, end_date, room_type, status } = req.body;
-    
-    try {
-        const deal = await updateDeal(reference_number, deal_name, reservations_left, end_date, room_type, status);
-        return res.status(200).json(deal);
-    } catch (error) {
-        res.status(404).json({ message: error.message });
-    }
+  const reference_number = req.params.id;
+  const { deal_name, reservations_left, end_date, room_type, status } =
+    req.body;
+
+  try {
+    const deal = await updateDeal(
+      reference_number,
+      deal_name,
+      reservations_left,
+      end_date,
+      room_type,
+      status
+    );
+    return res.status(200).json(deal);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
 };
 
 export const deleteD = async (req, res) => {
-    const id = req.params.id;
-    
-    try {
-        const deal = await removeDeal(id);
-        return res.status(200).json(deal);
-    } catch (error) {
-        res.status(404).json({ message: error.message });
-    }
+  const id = req.params.id;
+
+  try {
+    const deal = await removeDeal(id);
+    return res.status(200).json(deal);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
+//find rooms by Bed Type and Status = Available
+export const findRoomsByBedType = async (req, res) => {
+  const bed_type = req.params.bed_type;
+  try {
+    const rooms = await findRoomsbyBedType(bed_type);
+    return res.status(200).json(rooms);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
 };
