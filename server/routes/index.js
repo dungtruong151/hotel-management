@@ -25,7 +25,7 @@ import {
 
 const appRouter = Router();
 
-//Products
+//Guest
 appRouter.get("/products", getAllProducts);
 appRouter.get("/products/:id", getProduct);
 appRouter.post("/products/create", createProduct);
