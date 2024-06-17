@@ -1,12 +1,12 @@
 {
   "files": {
-    "main.js": "/motel-management/static/js/main.d059dd72.js",
+    "main.js": "/motel-management/static/js/main.9b1ff760.js",
     "static/js/453.258b012d.chunk.js": "/motel-management/static/js/453.258b012d.chunk.js",
     "index.html": "/motel-management/index.html",
-    "main.d059dd72.js.map": "/motel-management/static/js/main.d059dd72.js.map",
+    "main.9b1ff760.js.map": "/motel-management/static/js/main.9b1ff760.js.map",
     "453.258b012d.chunk.js.map": "/motel-management/static/js/453.258b012d.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/main.d059dd72.js"
+    "static/js/main.9b1ff760.js"
   ]
 }
